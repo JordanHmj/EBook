@@ -33,7 +33,7 @@ public class Account extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		response.setHeader("Content-type", "text/html;charset=UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out=response.getWriter();
 		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
