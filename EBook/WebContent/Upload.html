@@ -3,12 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" style="text/css" href="Content/bootstrap.min.css"></link>
+<script type="text/javascript" src="Scripts/jquery.min.js"></script>
 </head>
 <body>
 <form action="UploadFile" enctype="multipart/form-data" method="post">
-	文件说明：<input type="text" name="username"><br/>
-        上传文件1：<input type="file" name="file1"><br/>
+	选择分类：
+	<select id="category" name="category">
+		<option value="前端开发">前端开发</option>
+		<option value="后端开发">后端开发</option>
+		<option value="移动开发">移动开发</option>
+		<option value="数据库">数据库</option>
+		<option value="其他">其他</option>
+	</select>
+	<select id="bookCategory" name="bookCategory"></select><br/>
+        选择文件：<input type="file" name="file1"><br/>
+        教程简介：<input type="text" name="username" style="width:300px;height:100px"><br/>
     <input type="submit" value="提交">
 </form>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		RefreshCategory();
+		$("#category").change(function(){
+			RefreshCategory();
+		});
+	});
+	function RefreshCategory(){
+		$.ajax({
+			type:"GET",
+			url:"GetBookCategory",
+			data:{category:$("#category").val()},
+			success:function(data){
+				$("#bookCategory").html(data);
+			},
+			error:function(data){
+				alert("发送失败");
+			}
+		});
+	}
+</script>
 </body>
 </html>

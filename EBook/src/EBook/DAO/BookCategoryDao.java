@@ -2,42 +2,40 @@ package EBook.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import EBook.Model.*;
 
-import EBook.Model.Book;
-
-public class BookDao {
-    
-	public BookDao() {
+public class BookCategoryDao {
+	
+	public BookCategoryDao()
+	{
 		
 	}
 	
-	public List<Book> getBooks()
+	public List<BookCategory> getBookCategorys(String _category)
 	{
-		Book book;
-		List<Book> bookList=new ArrayList<Book>();
+		BookCategory bookCategory;
+		List<BookCategory> bookCategoryList=new ArrayList<BookCategory>();
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			Statement st = conn.createStatement();
-			String sql = "select * from tBooks";
-			ResultSet rs = st.executeQuery(sql);
+			
+			String sql = "select * from tBookCategory where Category=?";
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, _category);
+			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()){
-	            book=new Book();
-	            book.setID(rs.getInt("ID"));
-	            book.setNameCn(rs.getString("NameCn"));
-	            book.setNameEn(rs.getString("NameEn"));
-	            book.setScore(rs.getInt("Score"));
-	            book.setDownNum(rs.getInt("DownNum"));
-	            book.setHostID(rs.getInt("HostID"));
-	            book.setCategoryID(rs.getInt("CategoryID"));
-	            bookList.add(book);
+				bookCategory=new BookCategory();
+				bookCategory.setID(rs.getInt("ID"));
+				bookCategory.setName(rs.getString("Name"));
+				bookCategory.setCategory(rs.getString("Category"));
+	            bookCategoryList.add(bookCategory);
 	        }
 			rs.close();
 			st.close();
@@ -54,6 +52,6 @@ public class BookDao {
             // TODO: handle exception
             e.printStackTrace();
         }
-		return bookList;
+		return bookCategoryList;
 	}
 }

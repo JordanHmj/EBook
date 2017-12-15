@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +19,9 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import EBook.DAO.BookDao;
+import EBook.Model.Book;
 
 /**
  * Servlet implementation class UploadFile
@@ -136,22 +140,25 @@ public class UploadFile extends HttpServlet {
                     message = "文件上传成功！";
                 }
             }
-        }catch (FileUploadBase.FileSizeLimitExceededException e) {
-            e.printStackTrace();
-            request.setAttribute("message", "单个文件超出最大值！！！");
-            request.getRequestDispatcher("/UploadResult.jsp").forward(request, response);
-            return;
-        }catch (FileUploadBase.SizeLimitExceededException e) {
-            e.printStackTrace();
-            request.setAttribute("message", "上传文件的总的大小超出限制的最大值！！！");
-            request.getRequestDispatcher("/UploadResult.jsp").forward(request, response);
-            return;
         }catch (Exception e) {
             message= "文件上传失败！";
             e.printStackTrace();
         }
-        request.setAttribute("message",message);
-        request.getRequestDispatcher("/UploadResult.jsp").forward(request, response);
+        //request.setAttribute("message",message);
+        //request.getRequestDispatcher("/UploadResult.jsp").forward(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out=response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+        out.println("<HTML>");
+        out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+        out.println("  <BODY>");
+        out.print(message);
+        out.println("<br /><br />");
+        out.println("  </BODY>");
+        out.println("</HTML>");
+        out.flush();
+        out.close();
 	}
 
 	/**

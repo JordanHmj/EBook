@@ -8,12 +8,6 @@ import java.sql.SQLException;
 import EBook.Model.Host;
 
 public class HostDao {
-    //数据库地址
-    private String url = "jdbc:mysql://47.93.246.137:3306/EBookDB?characterEncoding=utf8&useSSL=false";
-    //MySQL配置时的用户名
-    private String userName = "root";
-    //MySQL配置时的密码
-    private String password = "JordanHmj@01";
     
 	public HostDao() {
 		
@@ -25,7 +19,7 @@ public class HostDao {
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(url, userName, password);
+			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
 			String sql = "select * from tHosts where ID=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, _ID);
@@ -64,7 +58,7 @@ public class HostDao {
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(url, userName, password);
+			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
 			String sql = "select * from tHosts where UserName=? and UserPwd=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, _userName);
