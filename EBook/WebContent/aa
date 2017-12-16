@@ -1,1 +1,3 @@
-mysql 密码用AES_DECRYPT
+密码用AES_DECRYPT
+邮箱用截取字符串的形式
+
