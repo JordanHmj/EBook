@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -21,7 +22,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import EBook.DAO.BookDao;
-import EBook.Model.Book;
 
 /**
  * Servlet implementation class UploadFile
@@ -29,7 +29,8 @@ import EBook.Model.Book;
 @WebServlet("/UploadFile")
 public class UploadFile extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    String userName; 
+    String userID;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,6 +44,14 @@ public class UploadFile extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		HttpSession session=request.getSession();
+		userName=(String) session.getAttribute("UserName");
+		userID=(String) session.getAttribute("UserID");
+		if(userName==null)
+		{
+			response.sendRedirect("Login.html");
+		}
 		//得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
         String savePath = this.getServletContext().getRealPath("/WEB-INF/upload");
         System.out.println(savePath);
@@ -86,16 +95,26 @@ public class UploadFile extends HttpServlet {
                 return;
             }
             
-            //设置上传单个文件的大小的最大值，目前是设置为1024*1024字节，也就是1MB
-            upload.setFileSizeMax(1024*1024*50);
-            //设置上传文件总量的最大值，最大值=同时上传的多个文件的大小的最大值的和，目前设置为50MB
-            upload.setSizeMax(1024*1024*50);
+            //设置上传单个文件的大小的最大值，目前是设置为1024*1024字节，也就是100MB
+            upload.setFileSizeMax(1024*1024*100);
+            //设置上传文件总量的最大值，最大值=同时上传的多个文件的大小的最大值的和，目前设置为100MB
+            upload.setSizeMax(1024*1024*100);
             //4、使用ServletFileUpload解析器解析上传数据，解析结果返回的是一个List<FileItem>集合，每一个FileItem对应一个Form表单的输入项
             List<FileItem> list = upload.parseRequest(request);
+            String categoryID="";
+            String introduction="";
             for(FileItem item : list){
                 //如果fileitem中封装的是普通输入项的数据
                 if(item.isFormField()){
                     String name = item.getFieldName();
+                    if(name=="bookCategory")
+                    {
+                    	categoryID=item.getString("UTF-8");
+                    }
+                    if(name=="fileIntro")
+                    {
+                    	introduction=item.getString("UTF-8");
+                    }
                     //解决普通输入项的数据的中文乱码问题
                     String value = item.getString("UTF-8");
                     //value = new String(value.getBytes("iso8859-1"),"UTF-8");
@@ -107,21 +126,27 @@ public class UploadFile extends HttpServlet {
                     if(filename==null || filename.trim().equals("")){
                         continue;
                     }
+                    BookDao bDao=new BookDao();
+                    if(bDao.isExist(filename, userID))
+                    {
+                    	message="您已经上传过该文件！";
+                    	continue;
+                    }
                     //注意：不同的浏览器提交的文件名是不一样的，有些浏览器提交上来的文件名是带有路径的，如：  c:\a\b\1.txt，而有些只是单纯的文件名，如：1.txt
                     //处理获取到的上传文件的文件名的路径部分，只保留文件名部分
                     filename = filename.substring(filename.lastIndexOf("\\")+1);
                     //得到上传文件的扩展名
-                    String fileExtName = filename.substring(filename.lastIndexOf(".")+1);
+                    //String fileExtName = filename.substring(filename.lastIndexOf(".")+1);
                     //如果需要限制上传的文件类型，那么可以通过文件的扩展名来判断上传的文件类型是否合法
-                    System.out.println("上传的文件的扩展名是："+fileExtName);
+                    //System.out.println("上传的文件的扩展名是："+fileExtName);
                     //获取item中的上传文件的输入流
                     InputStream in = item.getInputStream();
                     //得到文件保存的名称
-                    String saveFilename = makeFileName(filename);
+                    //String saveFilename = makeFileName(filename);
                     //得到文件的保存目录
-                    String realSavePath = makePath(saveFilename, savePath);
+                    String realSavePath = makePath(filename, savePath);
                     //创建一个文件输出流
-                    FileOutputStream out = new FileOutputStream(realSavePath + "\\" + saveFilename);
+                    FileOutputStream out = new FileOutputStream(realSavePath + "\\" + filename);
                     //创建一个缓冲区
                     byte buffer[] = new byte[1024];
                     //判断输入流中的数据是否已经读完的标识
@@ -137,6 +162,7 @@ public class UploadFile extends HttpServlet {
                     out.close();
                     //删除处理文件上传时生成的临时文件
                     //item.delete();
+                    bDao.AddBook(filename, userID, categoryID, introduction);
                     message = "文件上传成功！";
                 }
             }
@@ -176,11 +202,12 @@ public class UploadFile extends HttpServlet {
 	
 	private String makePath(String filename,String savePath){
         //得到文件名的hashCode的值，得到的就是filename这个字符串对象在内存中的地址
-        int hashcode = filename.hashCode();
-        int dir1 = hashcode&0xf;  //0--15
-        int dir2 = (hashcode&0xf0)>>4;  //0-15
+        //int hashcode = filename.hashCode();
+        //int dir1 = hashcode&0xf;  //0--15
+        //int dir2 = (hashcode&0xf0)>>4;  //0-15
         //构造新的保存目录
-        String dir = savePath + "\\" + dir1 + "\\" + dir2;  //upload\2\3  upload\3\5
+        //String dir = savePath + "\\" + dir1 + "\\" + dir2;  //upload\2\3  upload\3\5
+		String dir = savePath + "\\" + userName;
         //File既可以代表文件也可以代表目录
         File file = new File(dir);
         //如果目录不存在
