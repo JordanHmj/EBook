@@ -10,20 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import EBook.DAO.HostDao;
-import EBook.Model.Host;
-
 /**
- * Servlet implementation class Test
+ * Servlet implementation class CheckCode
  */
-@WebServlet("/Test")
-public class Test extends HttpServlet {
+@WebServlet("/CheckCode")
+public class CheckCode extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Test() {
+    public CheckCode() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,16 +30,19 @@ public class Test extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html;charset=UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		HttpSession session=request.getSession();
-		String signID=(String) session.getAttribute("SignID");
-		HostDao hostDao=new HostDao();
-		Host host=hostDao.getHost(signID);
-		PrintWriter out=response.getWriter();
-		out.print(host.getUserName());
-		out.flush();
-		out.close();
+		request.setCharacterEncoding("utf-8");
+        String inCode = request.getParameter("input_code");
+        HttpSession session = request.getSession();
+        int result = 0;
+        if(session.getAttribute("code").toString().equalsIgnoreCase(inCode)){
+            result = 1;
+        } 
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("text");
+        PrintWriter out = response.getWriter();
+        out.println(result);
+        out.flush();
+        out.close();
 	}
 
 	/**

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import EBook.Model.Host;
 import EBook.DAO.HostDao;
 
 /**
@@ -41,8 +40,7 @@ public class Login extends HttpServlet {
         if(hostID>0)
         {
         	HttpSession session=request.getSession();
-        	session.setAttribute("UserID", String.valueOf(hostID));
-        	session.setAttribute("UserName", userName);
+        	session.setAttribute("SignID", String.valueOf(hostID));
         	response.sendRedirect("Index.html");
         }
         else

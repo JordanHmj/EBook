@@ -1,29 +1,26 @@
 package EBook.BLL;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import EBook.DAO.HostDao;
 import EBook.Model.Host;
+import EBook.Util.MailService;
+import EBook.DAO.HostDao;
 
 /**
- * Servlet implementation class Test
+ * Servlet implementation class Register
  */
-@WebServlet("/Test")
-public class Test extends HttpServlet {
+@WebServlet("/Register")
+public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Test() {
+    public Register() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,16 +30,10 @@ public class Test extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html;charset=UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		HttpSession session=request.getSession();
-		String signID=(String) session.getAttribute("SignID");
-		HostDao hostDao=new HostDao();
-		Host host=hostDao.getHost(signID);
-		PrintWriter out=response.getWriter();
-		out.print(host.getUserName());
-		out.flush();
-		out.close();
+		//HostDao hDao=new HostDao();
+		//Host host=hDao.getHost("92038");
+		//MailService mailService=new MailService(host);
+		MailService.sendMail();
 	}
 
 	/**

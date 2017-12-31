@@ -4,10 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import EBook.Model.Book;
@@ -33,19 +31,12 @@ public class BookDao {
 			st.setString(4, _introduction);
 			st.setTimestamp(5, new java.sql.Timestamp(new Date().getTime()));
 			System.out.println(sql);*/
-			num = st.executeUpdate(sql);
+			num = st.executeUpdate();
 
 			st.close();
 			conn.close();
 		}
-		catch(ClassNotFoundException e) {   
-            //数据库驱动类异常处理
-            System.out.println("Sorry,can`t find the Driver!");   
-            e.printStackTrace();   
-            } catch(SQLException e) {
-            //数据库连接失败异常处理
-            e.printStackTrace();  
-            }catch (Exception e) {
+		catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }
@@ -73,14 +64,7 @@ public class BookDao {
 			st.close();
 			conn.close();
 		}
-		catch(ClassNotFoundException e) {   
-            //数据库驱动类异常处理
-            System.out.println("Sorry,can`t find the Driver!");   
-            e.printStackTrace();   
-            } catch(SQLException e) {
-            //数据库连接失败异常处理
-            e.printStackTrace();  
-            }catch (Exception e) {
+		catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }
@@ -102,29 +86,56 @@ public class BookDao {
 			while(rs.next()){
 	            book=new Book();
 	            book.setID(rs.getInt("ID"));
-	            book.setNameCn(rs.getString("NameCn"));
-	            book.setNameEn(rs.getString("NameEn"));
-	            book.setScore(rs.getInt("Score"));
+	            book.setName(rs.getString("Name"));
+	            book.setScore(rs.getFloat("Score"));
 	            book.setDownNum(rs.getInt("DownNum"));
 	            book.setHostID(rs.getInt("HostID"));
 	            book.setCategoryID(rs.getInt("CategoryID"));
+	            book.setIntroduction(rs.getString("Introduction"));
+	            book.setCreateDate(rs.getDate("CreateDate"));
 	            bookList.add(book);
 	        }
 			rs.close();
 			st.close();
 			conn.close();
 		}
-		catch(ClassNotFoundException e) {   
-            //数据库驱动类异常处理
-            System.out.println("Sorry,can`t find the Driver!");   
-            e.printStackTrace();   
-            } catch(SQLException e) {
-            //数据库连接失败异常处理
-            e.printStackTrace();  
-            }catch (Exception e) {
+		catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }
 		return bookList;
+	}
+	
+	public Book getBook(int signID)
+	{
+		Book book=new Book();
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
+			String sql = "select * from tBooks where ID+DATE_FORMAT(CreateDate, '%s%H%i')=?";
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, signID);
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()){
+	            book.setID(rs.getInt("ID"));
+	            book.setName(rs.getString("Name"));
+	            book.setScore(rs.getFloat("Score"));
+	            book.setDownNum(rs.getInt("DownNum"));
+	            book.setHostID(rs.getInt("HostID"));
+	            book.setCategoryID(rs.getInt("CategoryID"));
+	            book.setIntroduction(rs.getString("Introduction"));
+	            book.setCreateDate(rs.getDate("CreateDate"));
+	        }
+			rs.close();
+			st.close();
+			conn.close();
+		}
+		catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+		return book;
 	}
 }

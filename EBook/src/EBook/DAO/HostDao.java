@@ -13,20 +13,20 @@ public class HostDao {
 		
 	}
 	
-	public Host getHost(String _ID)
+	public Host getHost(String signID)
 	{
 		Host host=new Host();
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			String sql = "select * from tHosts where ID=?";
+			String sql = "select *,ID+DATE_FORMAT(CreateDate, '%s%H%i') as SignID from tHosts where ID+DATE_FORMAT(CreateDate, '%s%H%i')=?";
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, _ID);
+			st.setString(1, signID);
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()){
-	            host.setID(rs.getInt("ID"));
+	            host.setID(rs.getInt("SignID"));
 	            host.setUserName(rs.getString("UserName"));
 	            host.setUserPwd(rs.getString("UserPwd"));
 	            host.setUserMail(rs.getString("UserMail"));
@@ -38,14 +38,7 @@ public class HostDao {
 			st.close();
 			conn.close();
 		}
-		catch(ClassNotFoundException e) {   
-            //数据库驱动类异常处理
-            System.out.println("Sorry,can`t find the Driver!");   
-            e.printStackTrace();   
-            } catch(SQLException e) {
-            //数据库连接失败异常处理
-            e.printStackTrace();  
-            }catch (Exception e) {
+		catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }
@@ -59,28 +52,21 @@ public class HostDao {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			String sql = "select * from tHosts where UserName=? and UserPwd=?";
+			String sql = "select ID+DATE_FORMAT(CreateDate, '%s%H%i') as SignID from tHosts where UserName=? and UserPwd=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, _userName);
 			st.setString(2, _userPwd);
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()){
-				hostID=rs.getInt("ID");
+				hostID=rs.getInt("SignID");
 	        }
             
 			rs.close();
 			st.close();
 			conn.close();
 		}
-		catch(ClassNotFoundException e) {   
-            //数据库驱动类异常处理
-            System.out.println("Sorry,can`t find the Driver!");   
-            e.printStackTrace();   
-            } catch(SQLException e) {
-            //数据库连接失败异常处理
-            e.printStackTrace();  
-            }catch (Exception e) {
+		catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }

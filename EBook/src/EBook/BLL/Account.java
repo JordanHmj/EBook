@@ -53,8 +53,7 @@ public class Account extends HttpServlet {
         {
         	Book book=bookList.get(i);
         	out.print("<tr>");
-        	out.print("<td>"+book.getNameCn()+"</td>");
-        	out.print("<td>"+book.getNameEn()+"</td>");
+        	out.print("<td>"+book.getName()+"</td>");
         	out.print("<td>"+book.getScore()+"</td>");
         	out.print("<td>"+book.getDownNum()+"</td>");
         	out.print("</tr>");
