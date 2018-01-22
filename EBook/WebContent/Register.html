@@ -3,13 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <title>doucheng-注册</title>
+<link rel="stylesheet" style="text/css" href="Content/bootstrap.min.css"></link>
+<script type="text/javascript" src="Scripts/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="Scripts/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#userName").blur(function(){
+			$.ajax({
+				type:"GET",
+				url:"UserNameExist",
+				data:{userName:$("#userName").val()},
+				success:function(data){
+					alert(data);
+				},
+				error:function(data){
+					alert("发送失败");
+				}
+			});
+		});
+	})
+</script>
 </head>
 <body>
-<form>
+<form action="Register" method="post">
 用户名:<input id="userName" name="userName" type="text" placeholder="8-20个字符，数字、字母组合"/>
+<span id="labUserName"></span>
+<br />
 邮箱:<input id="userMail" name="userMail" type="text" />
-密码:<input id="password" name="password" type="password" />
-确认密码:<input id="passwordC" name="passwordC" type="password" /> 
+密码:<input id="userPwd" name="userPwd" type="password" />
+确认密码:<input id="userPwdA" name="userPwdA" type="password" /> 
 <input type="submit" value="提交" />
 </form>
 

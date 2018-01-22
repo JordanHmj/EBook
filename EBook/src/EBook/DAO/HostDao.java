@@ -20,7 +20,7 @@ public class HostDao {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			String sql = "select *,ID+DATE_FORMAT(CreateDate, '%s%H%i') as SignID from tHosts where ID+DATE_FORMAT(CreateDate, '%s%H%i')=?";
+			String sql = "select *,ID+DateKey(CreateDate) as SignID from tHosts where ID+DateKey(CreateDate)=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, signID);
 			ResultSet rs = st.executeQuery();
@@ -52,7 +52,7 @@ public class HostDao {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			String sql = "select ID+DATE_FORMAT(CreateDate, '%s%H%i') as SignID from tHosts where UserName=? and UserPwd=?";
+			String sql = "select ID+DateKey(CreateDate) as SignID from tHosts where UserName=? and AES_DECRYPT(UNHEX(UserPwd),DateKey(CreateDate))=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, _userName);
 			st.setString(2, _userPwd);
@@ -71,5 +71,31 @@ public class HostDao {
             e.printStackTrace();
         }
 		return hostID;
+	}
+
+	public boolean userNameExist(String userName)
+	{
+		boolean exist=false;
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
+			String sql = "select UserName from tHosts where UserName=?";
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, userName);
+			ResultSet rs = st.executeQuery();
+			while(rs.next()){
+	            exist=true;
+	        }
+            
+			rs.close();
+			st.close();
+			conn.close();
+		}
+		catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+		return exist;
 	}
 }

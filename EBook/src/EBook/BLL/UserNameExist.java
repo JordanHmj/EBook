@@ -8,22 +8,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import EBook.Util.MailService;
-import EBook.Util.ShaunUtils;
-import EBook.DAO.ApplicantDao;
 
+import EBook.DAO.HostDao;
 
 /**
- * Servlet implementation class Register
+ * Servlet implementation class UserNameExist
  */
-@WebServlet("/Register")
-public class Register extends HttpServlet {
+@WebServlet("/UserNameExist")
+public class UserNameExist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Register() {
+    public UserNameExist() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,31 +31,17 @@ public class Register extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		HostDao hostDao=new HostDao();
 		String userName=request.getParameter("userName");
-		String userPwd=request.getParameter("userPwd");
-		String userMail=request.getParameter("userMail");
-		ApplicantDao appDao=new ApplicantDao();
-		int id=appDao.Add(userName, userPwd, userMail);
-		String message="failed";
-		if(id>0)
-		{
-			message="success";
-			appDao.AESPwd(id);
-			MailService.sendMail(userMail,userName);
-		}
 		PrintWriter out=response.getWriter();
-		response.setContentType("text/html;charset=UTF-8");
-		response.setCharacterEncoding("UTF-8");
-		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
-        out.println("<HTML>");
-        out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
-        out.println("  <BODY>");
-        out.print(message);
-        out.println("<br /><br />");
-        out.println("  </BODY>");
-        out.println("</HTML>");
-        out.flush();
-        out.close();
+		if(hostDao.userNameExist(userName))
+		{
+			out.print("1");
+		}
+		else
+		{
+			out.print("0");
+		}
 	}
 
 	/**

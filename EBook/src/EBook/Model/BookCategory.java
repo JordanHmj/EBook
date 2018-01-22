@@ -4,6 +4,13 @@ public class BookCategory {
 	private int ID;
 	private String Name;
 	private String Category;
+	private String Intro;
+	public String getIntro() {
+		return Intro;
+	}
+	public void setIntro(String intro) {
+		Intro = intro;
+	}
 	public int getID() {
 		return ID;
 	}

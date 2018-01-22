@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import EBook.Model.Book;
+import EBook.Model.BookInfo;
+import EBook.Model.Comment;
 
 public class BookDao {
     
@@ -54,7 +56,6 @@ public class BookDao {
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, bookName);
 			st.setInt(2, Integer.parseInt(userID));
-			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);
 
 			while(rs.next()){
@@ -137,5 +138,18 @@ public class BookDao {
             e.printStackTrace();
         }
 		return book;
+	}
+	
+	public BookInfo getBookInfo(int signID)
+	{
+		BookInfo bookInfo=new BookInfo();
+		
+		Book book=getBook(signID);
+		bookInfo.setBook(book);
+		
+		CommentDao commDao=new CommentDao();
+		List<Comment> commArrs=commDao.getComments(book.getID());
+		bookInfo.setComments(commArrs);
+		return bookInfo;
 	}
 }

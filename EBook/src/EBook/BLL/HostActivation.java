@@ -2,28 +2,30 @@ package EBook.BLL;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import EBook.Util.MailService;
-import EBook.Util.ShaunUtils;
-import EBook.DAO.ApplicantDao;
 
+import EBook.DAO.ApplicantDao;
+import EBook.DAO.BookDao;
+import EBook.Model.Book;
+import EBook.Util.ShaunUtils;
 
 /**
- * Servlet implementation class Register
+ * Servlet implementation class HostActivation
  */
-@WebServlet("/Register")
-public class Register extends HttpServlet {
+@WebServlet("/HostActivation")
+public class HostActivation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Register() {
+    public HostActivation() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,27 +35,29 @@ public class Register extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String userName=request.getParameter("userName");
-		String userPwd=request.getParameter("userPwd");
-		String userMail=request.getParameter("userMail");
-		ApplicantDao appDao=new ApplicantDao();
-		int id=appDao.Add(userName, userPwd, userMail);
-		String message="failed";
-		if(id>0)
-		{
-			message="success";
-			appDao.AESPwd(id);
-			MailService.sendMail(userMail,userName);
-		}
-		PrintWriter out=response.getWriter();
 		response.setContentType("text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
+		String sign=request.getParameter("sign");
+		PrintWriter out=response.getWriter();
 		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
         out.println("<HTML>");
         out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
         out.println("  <BODY>");
-        out.print(message);
+        out.print("    This is HMJ's ");
+        ApplicantDao appDao=new ApplicantDao();
+        int result=appDao.AccountActivate(ShaunUtils.HexToString(sign));
+        if(result==0)
+        {
+        	out.print("激活失败！");
+        }
+        else
+        {
+        	out.print("激活成功！<a href='Index.html'>返回首页</a>");
+        }
+        
+        
         out.println("<br /><br />");
+        
         out.println("  </BODY>");
         out.println("</HTML>");
         out.flush();

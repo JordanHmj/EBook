@@ -1,27 +1,27 @@
-@CHARSET "UTF-8";
-
-.IntroContent p{
-	text-indent:2em;
+.IndexBookTop{
+	background-color:#FFFAFA;
+	padding:5px;
+	padding-left:20px;
+}
+.IndexBookCate{
+	margin-top:10px;
+	margin-bottom:10px;
+	padding-left:80px;
 }
 
-.otherUrl{
-	padding-top:8px;
-	padding-bottom:3px;
-}
-.otherUrl a:hover{
-	text-decoration:none;
-	color:#FF7F00;
-}
-
-.nbaRow{
-	margin-bottom:5px;
+.IndexBookCate a{
+	line-height: 20px;
+    text-decoration: none;
+    display: block;
+    padding: 4px;
+    color: #000;
 }
 
-.nbaEntity{
-	border:1px solid #F00;
-	width:170px;
+.IndexBookName{
+	width:350px;
+	line-height:25px;
 }
-
-.nbaAuthor{
-	color:#CD3333
+.IndexBookAttr{
+	width:150px;
+	line-height:22px;
 }

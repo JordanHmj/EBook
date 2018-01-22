@@ -2,29 +2,81 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>主页</title>
+<title>肖恩知识海洋-主页</title>
 <link rel="stylesheet" style="text/css" href="Content/bootstrap.min.css"></link>
-<script type="text/javascript" src="Scripts/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="Scripts/bootstrap.min.js"></script>
+<link rel="stylesheet" style="text/css" href="Content/MyStyle.css"></link>
+<script src="Scripts/jquery-3.2.1.min.js"></script>
+<script src="Scripts/bootstrap.min.js"></script>
 </head>
 <body>
-树懒IT教程分享小站，到GITHUB了。
-<a href="Login.html">登陆</a>
-<a href="#">注册</a>
-<div id="msg"></div>
+<div class="container">
+   <div class="row" >
+      <div class="col-md-offset-1 col-md-2" >
+      	肖恩知识海洋
+      </div>
+      <div class="col-md-offset-3 col-md-5" >
+      	<a href="#">教程</a>
+      	<a href="#">工具</a>
+      	<a href="Login.html">登陆 </a>/ 
+		<a href="#">注册</a>
+		<a href="#">提意见</a>
+      </div>
+   </div>
+   
+   <div class="row" >
+      <div class="col-md-3" id="bookCategory">
+		
+      </div>
+      <div class="col-md-9">
+      	<div id="intro" style="margin-bottom:70px;">
+      	</div>
+      	<ul id="books" class="list-unstyled" style="box-shadow:0 -1px 0 #D9D9D9;padding-top:10px;">
+      	</ul>
+      </div>
+   </div>
+</div>
 <script type="text/javascript">
-$(document).ready(function(){
+	$(function(){
 		$.ajax({
 			type:"GET",
-			url:"Test",                    
+			url:"GetBookCategory",
 			success:function(data){
-					$("#msg").html(data);
-				},
-				error:function(data){
-					alert("发送失败");
-				}
-			});
+				$("#bookCategory").html(data);
+			},
+			error:function(data){
+				alert("发送失败");
+			}
 		});
+	});
+	function cate(id){
+		$("#books li").remove();
+		$("#books").append("<li><ul class='list-inline'>"
+				+"<li class='IndexBookName'><strong>名称</strong></li>"
+				+"<li class='IndexBookAttr'><strong>下载次数</strong></li>"
+				+"<li class='IndexBookAttr'><strong>评分</strong></li>"
+				+"</ul></li>");
+		$.ajax({
+			type:"GET",
+			url:"GetCategory",
+			data:{cateID:id},
+			success:function(data){
+				var jsonReturn = JSON.parse(data);
+				var cateName=jsonReturn.bookCategory.name;
+				var cateIntro=jsonReturn.bookCategory.intro;
+				$("#intro").html(cateName+"：<br>"+cateIntro);
+				$.each(jsonReturn.books,function(index,item){
+					$("#books").append("<li><ul class='list-inline'>"
+							+"<li class='IndexBookName'><a href='BookDetail.html?sign="+item.ID+"'>"+item.name+"</a></li>"
+							+"<li class='IndexBookAttr'>"+item.downNum+"</li>"
+							+"<li class='IndexBookAttr'>"+item.score+"</li>"
+							+"</ul></li>");
+				})
+			},
+			error:function(data){
+				alert("发送失败");
+			}
+		});
+	}
 </script>
 </body>
 </html>

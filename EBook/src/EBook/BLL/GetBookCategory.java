@@ -36,16 +36,24 @@ public class GetBookCategory extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out=response.getWriter();
-		String _category=request.getParameter("category");
         BookCategoryDao bookCategoryDao=new BookCategoryDao();
-        List<BookCategory> bookCategoryList=bookCategoryDao.getBookCategorys(_category);
+        List<BookCategory> bookCategoryList=bookCategoryDao.getBookCategorys();
         BookCategory bookCategory;
-        
+        bookCategory=bookCategoryList.get(0);
+        out.print("<dl>");
         for(int i=0;i<bookCategoryList.size();i++)
         {
         	bookCategory=bookCategoryList.get(i);
-        	out.print("<option value='"+bookCategory.getID()+"'>"+bookCategory.getName()+"</option>");
+        	if(bookCategory.getName().length()==0)
+        	{
+    			out.print("<dt>"+bookCategory.getCategory()+"</dt>");
+        	}
+        	else
+        	{
+        		out.print("<dd onclick=cate("+bookCategory.getID()+")>"+bookCategory.getName()+"</dd>");
+        	}
         }
+        out.print("</dl>");
         out.flush();
         out.close();
 	}
