@@ -43,7 +43,7 @@ public class CategoryDao {
 			
 			List<Book> books=new ArrayList<Book>();
 			Book book;
-			sql = "select *,ID+DATE_FORMAT(CreateDate, '%s%H%i') as SignID from tBooks where CategoryID=?";
+			sql = "select *,ID+DateKey(CreateDate) as SignID from tBooks where CategoryID=?";
 			st = conn.prepareStatement(sql);
 			st.setInt(1, categoryID);
 			rs = st.executeQuery();

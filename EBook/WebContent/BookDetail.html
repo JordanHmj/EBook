@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" style="text/css" href="Content/bootstrap.min.css"></link>
-<script type="text/javascript" src="Scripts/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="Scripts/bootstrap.min.js"></script>
+<link rel="stylesheet" style="text/css" href="Content/MyStyle.css"></link>
+<script src="Scripts/jquery-3.2.1.min.js"></script>
+<script src="Scripts/bootstrap.min.js"></script>
 </head>
 <body>
 <div id="msg"></div>
@@ -13,18 +14,19 @@
 	$(function(){
 		var param=window.location.search;
 		var sign=param.substring(param.indexOf('=')+1,param.length);
-		alert(sign);
-/* 		$.ajax({
+		//alert(sign);
+ 		$.ajax({
 			type:"GET",
 			url:"GetBookInfo",
 			data:{signID:sign},
 			success:function(data){
-				$("#msg").html(data);
+				var jsonReturn=JSON.parse(data);
+				$("#msg").html(jsonReturn.book.name);
 			},
 			error:function(data){
 				alert("发送失败");
 			}
-		}); */
+		}); 
 	})
 </script>
 </body>

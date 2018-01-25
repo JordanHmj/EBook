@@ -114,7 +114,7 @@ public class BookDao {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			String sql = "select * from tBooks where ID+DATE_FORMAT(CreateDate, '%s%H%i')=?";
+			String sql = "select * from tBooks where ID+DateKey(CreateDate)=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setInt(1, signID);
 			ResultSet rs = st.executeQuery();
