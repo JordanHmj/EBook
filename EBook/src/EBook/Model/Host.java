@@ -2,6 +2,7 @@ package EBook.Model;
 
 public class Host {
 	private int ID;
+	private int SignID;
 	private String UserName;
 	private String UserPwd;
 	private String UserMail;
@@ -14,6 +15,14 @@ public class Host {
 
 	public void setID(int iD) {
 		ID = iD;
+	}
+	
+	public int getSignID() {
+		return SignID;
+	}
+
+	public void setSignID(int signID) {
+		SignID = signID;
 	}
 
 	public String getUserName() {

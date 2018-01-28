@@ -35,12 +35,12 @@ public class GetBookInfo extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		int signID=Integer.parseInt(request.getParameter("signID"));
+		int signID=Integer.parseInt(request.getParameter("SignID"));
 		BookDao bookDao=new BookDao();
 		BookInfo bookInfo=bookDao.getBookInfo(signID);
-		JSONObject json=JSONObject.fromObject(bookInfo);
+		//JSONObject json=JSONObject.fromObject(bookInfo);
 		PrintWriter out=response.getWriter();
-		out.print(json);
+		out.print(bookInfo.getBook().getName());
         out.flush();
         out.close();
 	}

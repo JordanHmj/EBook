@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Book {
 	private int ID;
+	private int SignID;
 	private String Name;
 	private float Score;
 	private int DownNum;
@@ -18,6 +19,13 @@ public class Book {
 	}
 	public void setID(int iD) {
 		ID = iD;
+	}
+
+	public int getSignID() {
+		return SignID;
+	}
+	public void setSignID(int signID) {
+		SignID = signID;
 	}
 	public String getName() {
 		return Name;

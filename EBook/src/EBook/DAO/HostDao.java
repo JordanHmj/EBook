@@ -26,7 +26,8 @@ public class HostDao {
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()){
-	            host.setID(rs.getInt("SignID"));
+	            host.setID(rs.getInt("ID"));
+	            host.setSignID(rs.getInt("SignID"));
 	            host.setUserName(rs.getString("UserName"));
 	            host.setUserPwd(rs.getString("UserPwd"));
 	            host.setUserMail(rs.getString("UserMail"));
@@ -52,7 +53,7 @@ public class HostDao {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			String sql = "select ID+DateKey(CreateDate) as SignID from tHosts where UserName=? and AES_DECRYPT(UNHEX(UserPwd),DateKey(CreateDate))=?";
+			String sql = "select SignID from tHosts where UserName=? and AES_DECRYPT(UNHEX(UserPwd),DateKey(CreateDate))=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, _userName);
 			st.setString(2, _userPwd);

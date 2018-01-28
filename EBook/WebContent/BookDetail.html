@@ -18,10 +18,10 @@
  		$.ajax({
 			type:"GET",
 			url:"GetBookInfo",
-			data:{signID:sign},
+			data:{SignID:sign},
 			success:function(data){
-				var jsonReturn=JSON.parse(data);
-				$("#msg").html(jsonReturn.book.name);
+				//var jsonReturn=JSON.parse(data);
+				$("#msg").html(data);
 			},
 			error:function(data){
 				alert("发送失败");

@@ -87,6 +87,7 @@ public class BookDao {
 			while(rs.next()){
 	            book=new Book();
 	            book.setID(rs.getInt("ID"));
+	            book.setSignID(rs.getInt("SignID"));
 	            book.setName(rs.getString("Name"));
 	            book.setScore(rs.getFloat("Score"));
 	            book.setDownNum(rs.getInt("DownNum"));
@@ -114,13 +115,14 @@ public class BookDao {
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
-			String sql = "select * from tBooks where ID+DateKey(CreateDate)=?";
+			String sql = "select * from tBooks where SignID=?";
 			PreparedStatement st = conn.prepareStatement(sql);
 			st.setInt(1, signID);
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()){
 	            book.setID(rs.getInt("ID"));
+	            book.setSignID(rs.getInt("SignID"));
 	            book.setName(rs.getString("Name"));
 	            book.setScore(rs.getFloat("Score"));
 	            book.setDownNum(rs.getInt("DownNum"));
@@ -147,9 +149,9 @@ public class BookDao {
 		Book book=getBook(signID);
 		bookInfo.setBook(book);
 		
-		CommentDao commDao=new CommentDao();
-		List<Comment> commArrs=commDao.getComments(book.getID());
-		bookInfo.setComments(commArrs);
+//		CommentDao commDao=new CommentDao();
+//		List<Comment> commArrs=commDao.getComments(book.getID());
+//		bookInfo.setComments(commArrs);
 		return bookInfo;
 	}
 }
