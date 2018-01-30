@@ -4,7 +4,7 @@ import java.util.List;
 
 public class BookInfo {
 	private Book book;
-	/*private List<Comment> comments;*/
+	private List<VmCommentHost> commHosts;
 	
 	public Book getBook() {
 		return book;
@@ -12,10 +12,10 @@ public class BookInfo {
 	public void setBook(Book book) {
 		this.book = book;
 	}
-/*	public List<Comment> getComments() {
-		return comments;
+	public List<VmCommentHost> getCommHosts() {
+		return commHosts;
 	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}*/
+	public void setCommHosts(List<VmCommentHost> commHosts) {
+		this.commHosts = commHosts;
+	}
 }

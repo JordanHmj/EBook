@@ -11,6 +11,7 @@ import java.util.List;
 import EBook.Model.Book;
 import EBook.Model.BookInfo;
 import EBook.Model.Comment;
+import EBook.Model.VmCommentHost;
 
 public class BookDao {
     
@@ -94,7 +95,6 @@ public class BookDao {
 	            book.setHostID(rs.getInt("HostID"));
 	            book.setCategoryID(rs.getInt("CategoryID"));
 	            book.setIntroduction(rs.getString("Introduction"));
-	            book.setCreateDate(rs.getDate("CreateDate"));
 	            bookList.add(book);
 	        }
 			rs.close();
@@ -129,7 +129,6 @@ public class BookDao {
 	            book.setHostID(rs.getInt("HostID"));
 	            book.setCategoryID(rs.getInt("CategoryID"));
 	            book.setIntroduction(rs.getString("Introduction"));
-	            book.setCreateDate(rs.getDate("CreateDate"));
 	        }
 			rs.close();
 			st.close();
@@ -148,10 +147,10 @@ public class BookDao {
 		
 		Book book=getBook(signID);
 		bookInfo.setBook(book);
-		
-//		CommentDao commDao=new CommentDao();
-//		List<Comment> commArrs=commDao.getComments(book.getID());
-//		bookInfo.setComments(commArrs);
+		int xx=book.getID();
+		VmBookDetailDao bookDetailDao=new VmBookDetailDao();
+		List<VmCommentHost> commHosts=bookDetailDao.getVmCommentHosts(book.getID());
+		bookInfo.setCommHosts(commHosts);
 		return bookInfo;
 	}
 }

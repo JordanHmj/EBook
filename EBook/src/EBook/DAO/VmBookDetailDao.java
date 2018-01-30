@@ -8,31 +8,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import EBook.Model.Comment;
+import EBook.Model.VmCommentHost;
 
-public class CommentDao {
+public class VmBookDetailDao {
 	
-	public List<Comment> getComments(int bookID)
+	public List<VmCommentHost> getVmCommentHosts(int bookID)
 	{
-		List<Comment> commArrs=new ArrayList<Comment>();
-		Comment comm;
+		List<VmCommentHost> commHosts=new ArrayList<VmCommentHost>();
+		VmCommentHost commHost;
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(ConnBase.url, ConnBase.userName, ConnBase.password);
 			
-			String sql = "select * from tComments where BookID=?";
+			String sql = "SELECT b.UserName,a.CreateDate,a.Content FROM tComments a LEFT JOIN tHosts b on a.HostID=b.ID where a.BookID=?";
 			PreparedStatement st=conn.prepareStatement(sql);
 			st.setInt(1, bookID);
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next())
 			{
-				comm=new Comment();
-				comm.setID(rs.getInt("ID"));
-				comm.setHostID(rs.getInt("HostID"));
-				comm.setBookID(rs.getInt("BookID"));
-				comm.setContent(rs.getString("Content"));
-				commArrs.add(comm);
+				commHost=new VmCommentHost();
+				commHost.setUserName(rs.getString("UserName"));
+				commHost.setCreateDate(rs.getString("CreateDate"));
+				commHost.setContent(rs.getString("Content"));
+				commHosts.add(commHost);
 			}
 			rs.close();
 			st.close();
@@ -42,6 +42,6 @@ public class CommentDao {
 		{
 			e.printStackTrace();
 		}
-		return commArrs;
+		return commHosts;
 	}
 }

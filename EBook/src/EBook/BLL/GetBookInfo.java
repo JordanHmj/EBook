@@ -38,9 +38,9 @@ public class GetBookInfo extends HttpServlet {
 		int signID=Integer.parseInt(request.getParameter("SignID"));
 		BookDao bookDao=new BookDao();
 		BookInfo bookInfo=bookDao.getBookInfo(signID);
-		//JSONObject json=JSONObject.fromObject(bookInfo);
+		JSONObject json=JSONObject.fromObject(bookInfo);
 		PrintWriter out=response.getWriter();
-		out.print(bookInfo.getBook().getName());
+		out.print(json);
         out.flush();
         out.close();
 	}
