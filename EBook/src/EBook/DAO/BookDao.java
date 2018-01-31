@@ -140,17 +140,4 @@ public class BookDao {
         }
 		return book;
 	}
-	
-	public BookInfo getBookInfo(int signID)
-	{
-		BookInfo bookInfo=new BookInfo();
-		
-		Book book=getBook(signID);
-		bookInfo.setBook(book);
-		int xx=book.getID();
-		VmBookDetailDao bookDetailDao=new VmBookDetailDao();
-		List<VmCommentHost> commHosts=bookDetailDao.getVmCommentHosts(book.getID());
-		bookInfo.setCommHosts(commHosts);
-		return bookInfo;
-	}
 }

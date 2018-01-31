@@ -3,14 +3,15 @@ package EBook.Model;
 import java.util.List;
 
 public class BookInfo {
-	private Book book;
+	private VmBookDetail vBookDetail;
 	private List<VmCommentHost> commHosts;
 	
-	public Book getBook() {
-		return book;
+	
+	public VmBookDetail getvBookDetail() {
+		return vBookDetail;
 	}
-	public void setBook(Book book) {
-		this.book = book;
+	public void setvBookDetail(VmBookDetail vBookDetail) {
+		this.vBookDetail = vBookDetail;
 	}
 	public List<VmCommentHost> getCommHosts() {
 		return commHosts;

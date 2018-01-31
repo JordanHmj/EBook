@@ -1,6 +1,5 @@
 package EBook.Model;
 
-import java.util.Date;
 
 public class VmCommentHost {
 	private String UserName;

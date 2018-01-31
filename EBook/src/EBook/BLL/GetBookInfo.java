@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import EBook.DAO.BookDao;
+import EBook.DAO.VmBookDetailDao;
 import EBook.Model.BookInfo;
 import net.sf.json.JSONObject;
 
@@ -36,8 +36,8 @@ public class GetBookInfo extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		int signID=Integer.parseInt(request.getParameter("SignID"));
-		BookDao bookDao=new BookDao();
-		BookInfo bookInfo=bookDao.getBookInfo(signID);
+		VmBookDetailDao vBookDetailDao=new VmBookDetailDao();
+		BookInfo bookInfo=vBookDetailDao.getBookInfo(signID);
 		JSONObject json=JSONObject.fromObject(bookInfo);
 		PrintWriter out=response.getWriter();
 		out.print(json);
